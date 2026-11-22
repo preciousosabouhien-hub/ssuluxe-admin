@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
+
 export default function AdminLogin() {
   const { signIn } = useAuth();
-
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,10 +33,10 @@ export default function AdminLogin() {
     <div className="admin-login-page">
       <form className="admin-login-card" onSubmit={handleSubmit}>
         <h1>Ssuxuluxe Hair</h1>
-        <p>Administrator Dashboard</p>
+        <p className="admin-title">Administrator Dashboard</p>
 
         <h2>Welcome back</h2>
-        <p>Sign in to manage your store.</p>
+        <p className="admin-sub-title" >Sign in to manage your store.</p>
 
         <label>Email address</label>
         <input
@@ -45,16 +46,22 @@ export default function AdminLogin() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <label>Password</label>
+      <div className="password-input-wrapper">
+        
         <input
-          type="password"
+          type={showPassword ? "text"  : "password" }
           placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
+        <button type="button" className="password-toggle" onClick={() => setShowPassword((prev) => !prev)}
+          aria-label={showPassword ? "Hide password" : "Show password"}>
+          {showPassword ? "Hide" : "Show" }
+          </button>
+          </div>
+          
         {error && <div className="login-error">{error}</div>}
 
         <button type="submit" disabled={loading}>

@@ -10,7 +10,7 @@ import OrdersTable from "./components/OrdersTable";
 import Wishlist from "./components/Wishlist";
 import Footer from "./components/Footer";
 import Toast from "./components/Toast";
-
+import Products from "./components/Products";
 import { metrics } from "./data/dashboardData";
 import { useDashboard } from "./context/DashboardContext";
 
@@ -49,13 +49,11 @@ const { activePage } = useDashboard();
 const renderPage = () => {
 switch (activePage) {
 case "Overview":
-return ;
+return <OverviewPage/> ;
 
   case "Products":
     return (
-      <PlaceholderPage
-        title="Product Management"
-        description="Manage your hair products, variations, prices, images and inventory here." />
+      <Products />
     );
   case "Analytics":
     return (
