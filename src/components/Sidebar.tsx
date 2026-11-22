@@ -1,7 +1,6 @@
 import { Activity,BarChart3,ChevronDown,ChevronRight,CircleHelp,CreditCard,FileText,LayoutDashboard,PackageCheck,Settings,ShoppingBag,Users,X } from "lucide-react";
 
 import { useDashboard } from "../context/DashboardContext";
-import heroImg from "./assets/icon.png";
 
 const groups=[{label:"WORKSPACE",items:[{name:"Overview",icon:LayoutDashboard},
     {name:"Analytics",icon:BarChart3},{name:"Customers",icon:Users},
