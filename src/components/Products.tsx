@@ -375,7 +375,7 @@ export default function Products() {
                     </td>
 
                     <td>
-                      {product.category?.[0]?.name ??
+                      {product.categories?.[0]?.name ??
                         "Uncategorised"}
                     </td>
 
