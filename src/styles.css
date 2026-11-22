@@ -188,7 +188,7 @@
   }
 }
 /* end of authentication styles */
-
+ 
 
 /*  ================================================================= 
 ===========================================================================  Products styling */
@@ -295,6 +295,241 @@
   padding: 9px 16px;
   cursor: pointer;
 }
+
+     /* =========================================  products upload ================================================= */
+.products-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.products-heading h2 {
+  margin-bottom: 6px;
+}
+
+.products-heading p {
+  color: #888;
+}
+
+.add-product-btn,
+.save-product-btn {
+  background: #3d2920;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-product-btn:hover,
+.save-product-btn:hover {
+  background: #654735;
+}
+
+.product-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.product-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.product-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.product-modal-header h2 {
+  margin-bottom: 6px;
+}
+
+.product-modal-header p {
+  color: #888;
+  font-size: 13px;
+}
+
+.close-modal {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  cursor: pointer;
+  color: #777;
+}
+
+.product-form-section {
+  border-top: 1px solid #eee;
+  padding: 22px 0;
+}
+
+.product-form-section h3 {
+  margin-bottom: 18px;
+  color: #3d2920;
+}
+
+.product-modal form > .product-form-section label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #51433c;
+}
+
+.product-modal input:not([type="checkbox"]),
+.product-modal select,
+.product-modal textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e5ded9;
+  border-radius: 6px;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+  background: #fff;
+}
+
+.product-modal input:focus,
+.product-modal select:focus,
+.product-modal textarea:focus {
+  border-color: #98765b;
+}
+
+.product-modal textarea {
+  resize: vertical;
+}
+
+.product-modal .checkbox-label {
+  display: flex !important;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  accent-color: #3d2920;
+}
+
+.variant-heading,
+.variant-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.add-variant-btn {
+  background: #f4eee9;
+  color: #3d2920;
+  border: none;
+  padding: 9px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.variant-form-card {
+  border: 1px solid #eee3dc;
+  border-radius: 9px;
+  padding: 18px;
+  margin-top: 18px;
+  background: #fdfbf9;
+}
+
+.variant-card-heading {
+  margin-bottom: 15px;
+}
+
+.variant-card-heading h4 {
+  color: #3d2920;
+}
+
+.remove-variant-btn {
+  border: none;
+  background: transparent;
+  color: #c0392b;
+  cursor: pointer;
+}
+
+.form-error {
+  background: #fff0ef;
+  color: #b42318;
+  border: 1px solid #f5c6c2;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+.product-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.cancel-product-btn {
+  background: #f1efed;
+  color: #51433c;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.product-form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.products-empty {
+  text-align: center;
+  padding: 45px 20px;
+  background: #fff;
+  border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+  .products-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .product-modal {
+    padding: 20px;
+  }
+
+  .variant-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .product-form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .product-form-actions button {
+    width: 100%;
+  }
+}
+
 /* ================================================================================= 
 =======================================================================================  
                                                                          end of Products styling ===========  */

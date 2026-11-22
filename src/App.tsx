@@ -92,20 +92,16 @@ return <OverviewPage/> ;
     );
   default:
     return (
-      <PlaceholderPage
-        title={activePage}
-        description="This section is being prepared."
-      />
+      <PlaceholderPage title={activePage} description="This section is being prepared." />
     );
 }
 
 };
 
 return (
-    <div className="app-shell">
-<Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-  <main className="main-area">
+    <div className="app-shell" > 
+    <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <main className="main-area">
     <Topbar onMenuClick={() => setSidebarOpen(true)} />
     <div className="page-content">
       
