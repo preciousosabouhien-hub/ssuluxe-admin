@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
 
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminLogin() {
   const { signIn } = useAuth();
@@ -47,27 +48,37 @@ export default function AdminLogin() {
           required
         />
         <label>Password</label>
-      <div className="password-input-wrapper">
-        
-        <input
-          type={showPassword ? "text"  : "password" }
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="button" className="password-toggle" onClick={() => setShowPassword((prev) => !prev)}
-          aria-label={showPassword ? "Hide password" : "Show password"}>
-          {showPassword ? "Hide" : "Show" }
-          </button>
-          </div>
-          
+    <div className="password-input-wrapper">
+      <input
+        type={showPassword ? "text" : "password"}
+        placeholder="Enter your password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
+      <button
+        type="button"
+        className="password-toggle"
+        onClick={() => setShowPassword((prev) => !prev)}
+        aria-label={showPassword ? "Hide password" : "Show password"}
+        aria-pressed={showPassword}
+      >
+        {showPassword ? (
+          <EyeOff size={19} />
+        ) : (
+          <Eye size={19} />
+        )}
+      </button>
+    </div>
+
         {error && <div className="login-error">{error}</div>}
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" className="login-btn" disabled={loading}>
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
     </div>
   );
 }
+
+

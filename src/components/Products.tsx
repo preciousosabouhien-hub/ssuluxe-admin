@@ -24,7 +24,7 @@ hair_type: string | null;
 is_active: boolean;
 categories: {
 name: string;
-} | null;
+}[] | null;
 product_variants: ProductVariant[];
 }
 
@@ -68,7 +68,7 @@ if (error) {
   console.error("Products fetch error:", error);
   setError(error.message);
 } else {
-  setProducts((data ?? []) as Product[]);
+  setProducts((data ?? []) as unknown as Product[]);
 }
 setLoading(false);
 
@@ -130,12 +130,12 @@ Manage your store products and inventory.
                   <strong>{product.name}</strong>
                   <small>{product.slug}</small>
                 </td>
-                <td>{product.categories?.name ?? "Uncategorised"}</td>
-                <td>{product.hair_type ?? "—"}</td>
+                <td>{product.categories?.[0]?.name ?? "Uncategorised"}</td>
+                <td>{product.hair_type ?? "-"}</td>
                 <td>{variants.length}</td>
                 <td>
                   {prices.length > 0
-                    ? `$${Math.min(...prices).toFixed(2)} – $${Math.max(
+                    ? `$${Math.min(...prices).toFixed(2)} - $${Math.max(
                         ...prices
                       ).toFixed(2)}`
                     : "No variants"}

@@ -19,14 +19,14 @@ interface AuthContextType {
 user: User | null;
 profile: AdminProfile | null;
 loading: boolean;
-signIn: (email: string, password: string) => Promise;
-signOut: () => Promise;
+signIn: (email: string, password: string) => Promise<void>;
+signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Automatically log out after 15 minutes of inactivity.
-const INACTIVITY_LIMIT = 15 * 60 * 1000;
+const INACTIVITY_LIMIT = 10 * 30 * 1000;
 
 export function AuthProvider({
 children,
