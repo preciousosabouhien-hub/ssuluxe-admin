@@ -7,6 +7,8 @@ interface ProductsTableProps {
   onDelete: (product: Product) => void;
 }
 
+
+
 export default function ProductsTable({
   products,
   onEdit,

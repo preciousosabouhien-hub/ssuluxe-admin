@@ -15,6 +15,7 @@ export default function Products() {
     saving,
     fetchProducts,
     addProduct,
+    deactivateProduct,
   } = useProducts();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,9 +42,27 @@ export default function Products() {
     alert("The edit form will be connected in the next step.");
   };
 
-  const handleDelete = (product: Product) => {
-    alert(`Delete functionality for ${product.name} will be added next.`);
-  };
+const handleDelete = async (product: Product) => {
+  const confirmed = window.confirm(
+    `Are you sure you want to deactivate "${product.name}"?`
+  );
+
+  if (!confirmed) return;
+
+  try {
+    await deactivateProduct(product.id);
+
+    alert("Product deactivated successfully!");
+  } catch (error) {
+    console.error("Error deactivating product:", error);
+
+    alert(
+      error instanceof Error
+        ? error.message
+        : "Unable to deactivate product."
+    );
+  }
+};
 
   return (
     <div className="products-page">

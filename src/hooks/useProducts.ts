@@ -13,6 +13,18 @@ import { createSlug, generateSku } from "../utils/productHelpers";
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+ const deactivateProduct = async (productId: string) => {
+  const { error } = await supabase
+    .from("products")
+    .update({ is_active: false })
+    .eq("id", productId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  await fetchProducts();
+};
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -205,6 +217,8 @@ export function useProducts() {
     error,
     saving,
     fetchProducts,
+    fetchCategories,
     addProduct,
+    deactivateProduct,
   };
 }
