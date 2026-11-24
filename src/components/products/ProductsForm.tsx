@@ -5,6 +5,8 @@ import type {
   VariantFormData,
 } from "../../types/product";
 import { emptyVariant, generateSku } from "../../utils/productHelpers";
+import  ProductImageUpload from "./ProductImageUpload";
+import ProductVariantForm from "./ProductVariantForm"
 
 interface ProductFormProps {
   categories: Category[];
@@ -214,197 +216,12 @@ export default function ProductForm({
           Active product
         </label>
       </div>
-
-      {/* Product Variants */}
-      <div className="product-form-section">
-        <div className="variant-heading">
-          <h3>Product Variants</h3>
-
-          <button
-            type="button"
-            onClick={addVariant}
-            className="add-variant-button"
-          >
-            + Add Variant
-          </button>
-        </div>
-
-        {form.variants.map((variant, index) => (
-          <div className="variant-form-card" key={index}>
-            <div className="variant-heading">
-              <h4>Variant {index + 1}</h4>
-
-              {form.variants.length > 1 && (
-                <button
-                  type="button"
-                  className="delete-button"
-                  onClick={() => removeVariant(index)}
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-
-            <label>
-              SKU
-              <div className="sku-input-group">
-                <input
-                  type="text"
-                  value={variant.sku}
-                  onChange={(e) =>
-                    updateVariant(index, "sku", e.target.value)
-                  }
-                  placeholder="Product SKU"
-                />
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    updateVariant(
-                      index,
-                      "sku",
-                      generateSku(form.name, variant.length)
-                    )
-                  }
-                >
-                  Generate
-                </button>
-              </div>
-            </label>
-
-            <label>
-              Hair Length
-              <input
-                type="text"
-                value={variant.length}
-                onChange={(e) =>
-                  updateVariant(index, "length", e.target.value)
-                }
-                placeholder="e.g. 18 inches"
-              />
-            </label>
-
-            <label>
-              Lace Type
-              <input
-                type="text"
-                value={variant.lace_type}
-                onChange={(e) =>
-                  updateVariant(index, "lace_type", e.target.value)
-                }
-                placeholder="e.g. 13x4 HD Lace"
-              />
-            </label>
-
-            <label>
-              Density
-              <input
-                type="text"
-                value={variant.density}
-                onChange={(e) =>
-                  updateVariant(index, "density", e.target.value)
-                }
-                placeholder="e.g. 180%"
-              />
-            </label>
-
-            <label>
-              Color
-              <input
-                type="text"
-                value={variant.color}
-                onChange={(e) =>
-                  updateVariant(index, "color", e.target.value)
-                }
-                placeholder="e.g. Natural Black"
-              />
-            </label>
-
-            <label>
-              Price (USD)
-              <input
-                type="number"
-                min="0.01"
-                step="0.01"
-                value={variant.price}
-                onChange={(e) =>
-                  updateVariant(index, "price", e.target.value)
-                }
-                placeholder="e.g. 185.00"
-                required
-              />
-            </label>
-
-            <label>
-              Stock Quantity
-              <input
-                type="number"
-                min="0"
-                value={variant.stock_quantity}
-                onChange={(e) =>
-                  updateVariant(
-                    index,
-                    "stock_quantity",
-                    e.target.value
-                  )
-                }
-                required
-              />
-            </label>
-
-            <label>
-              Variant Image
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={(e) =>
-                  handleImageChange(index, e.target.files?.[0])
-                }
-              />
-            </label>
-
-            {variant.imagePreview && (
-              <div className="product-image-preview">
-                <img
-                  src={variant.imagePreview}
-                  alt="Variant preview"
-                />
-              </div>
-            )}
-
-            <label className="product-checkbox">
-              <input
-                type="checkbox"
-                checked={variant.is_preorder}
-                onChange={(e) =>
-                  updateVariant(
-                    index,
-                    "is_preorder",
-                    e.target.checked
-                  )
-                }
-              />
-              Available for preorder
-            </label>
-
-            <label className="product-checkbox">
-              <input
-                type="checkbox"
-                checked={variant.is_active}
-                onChange={(e) =>
-                  updateVariant(
-                    index,
-                    "is_active",
-                    e.target.checked
-                  )
-                }
-              />
-              Active variant
-            </label>
-          </div>
-        ))}
-      </div>
-
+      <ProductVariantForm 
+      variants={form.variants}
+      productName={form.name}
+      onChange={updateVariant}
+      onAdd={addVariant}
+      onRemove={removeVariant} />
       {/* Form Actions */}
       <div className="product-form-actions">
         <button
