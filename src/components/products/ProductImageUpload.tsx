@@ -9,32 +9,34 @@ export default function ProductImageUpload({
 preview,
 onImageChange,
 }: ProductImageUploadProps) {
-const inputRef = useRef(null);
+const inputRef = useRef<HTMLInputElement | null>(null);
+const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const input = event.currentTarget as HTMLInputElement;
+  const file = input.files?.[0];
 
-const handleChange = (event: React.ChangeEvent) => {
-const file = event.target.files?.[0];
+  if (!file) return;
 
-if (!file) return;
-const allowedTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-];
-if (!allowedTypes.includes(file.type)) {
-  alert("Please select a JPG, PNG, or WebP image.");
-  event.target.value = "";
-  return;
-}
-if (file.size > 5 * 1024 * 1024) {
-  alert("Image size must not exceed 5MB.");
-  event.target.value = "";
-  return;
-}
-const imagePreview = URL.createObjectURL(file);
-console.log("Selected image:", file);
-console.log("Preview URL:", imagePreview);
-onImageChange(file, imagePreview);
+  const allowedTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+  ];
 
+  if (!allowedTypes.includes(file.type)) {
+    alert("Please select a JPG, PNG, or WebP image.");
+    input.value = "";
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Image size must not exceed 5MB.");
+    input.value = "";
+    return;
+  }
+
+  const imagePreview = URL.createObjectURL(file);
+
+  onImageChange(file, imagePreview);
 };
 
 const handleRemove = () => {
@@ -46,7 +48,8 @@ if (inputRef.current) {
 
 };
 
-return (    <div className="product-image-upload">
+return (
+  <div className="product-image-upload">
 <label>
 Variant Image
 
