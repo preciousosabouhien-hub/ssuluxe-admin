@@ -24,8 +24,11 @@ export default function Sidebar({open,onClose}:{open:boolean;onClose:()=>void}){
  </div><strong>Need a hand?</strong><p>Visit our help center for tips and guides.</p>
  <button onClick={()=>showNotice("Help center is a demo placeholder")}>Open help center <ChevronRight size={13}/></button>
  </div><button className="nav-item" onClick={()=>showNotice("Settings are a demo placeholder")}><Settings size={17}/>
- <span>Settings</span></button><div className="sidebar-user"><div className="avatar avatar-purple">BF</div>
- <div><strong>Bill Ford</strong><small>Administrator</small></div></div></div>
+ <span>Settings</span></button><div className="sidebar-user"><div className="avatar avatar-purple">PO</div>
+  <div className="profile-copy">
+        <strong>Precious Omosefe</strong>
+        <small>Administrator</small>
+      </div></div></div>
  </aside>
  </>;
 }

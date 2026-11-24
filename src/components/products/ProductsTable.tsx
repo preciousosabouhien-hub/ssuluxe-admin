@@ -1,4 +1,5 @@
 import type { Product } from "../../types/product";
+import ProductStatus from "./ProductStatus";
 
 interface ProductsTableProps {
   products: Product[];
@@ -50,13 +51,7 @@ export default function ProductsTable({
               <td>{product.product_variants?.length ?? 0}</td>
 
               <td>
-                <span
-                  className={`product-status ${
-                    product.is_active ? "active" : "inactive"
-                  }`}
-                >
-                  {product.is_active ? "Active" : "Inactive"}
-                </span>
+               <ProductStatus isActive={product.is_active} />
               </td>
 
               <td>
