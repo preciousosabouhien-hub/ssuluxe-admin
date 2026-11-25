@@ -34,7 +34,7 @@ return (
       + Add Variant
     </button>
   </div>
-  {variants.map((variant, index) => (
+  {(variants ?? []).map((variant, index) => (
     <div className="variant-form-card" key={index}>
       <div className="variant-heading">
         <h4>Variant {index + 1}</h4>

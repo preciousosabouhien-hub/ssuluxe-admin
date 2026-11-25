@@ -42,8 +42,10 @@ export function useProducts() {
           id,
           name,
           slug,
+          category_id,
           description,
           hair_type,
+          features,
           is_active,
           category:categories!products_category_id_fkey (
             name
@@ -209,6 +211,125 @@ export function useProducts() {
       setSaving(false);
     }
   }
+async function updateProduct(
+  productId: string,
+  form: ProductFormData
+) {
+  setSaving(true);
+
+  try {
+    // 1. Update main product information
+    const { error: productError } = await supabase
+      .from("products")
+      .update({
+        name: form.name.trim(),
+        slug: createSlug(form.name),
+        category_id: form.categoryId || null,
+        description: form.description.trim() || null,
+        hair_type: form.hairType || null,
+        features: form.features
+          .split(",")
+          .map((feature) => feature.trim())
+          .filter(Boolean),
+        is_active: form.isActive,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", productId);
+
+    if (productError) throw productError;
+
+    // 2. Get existing variants
+    const { data: existingVariants, error: fetchError } =
+      await supabase
+        .from("product_variants")
+        .select("id")
+        .eq("product_id", productId);
+
+    if (fetchError) throw fetchError;
+
+    const existingIds = new Set(
+      (existingVariants ?? []).map((variant) => variant.id)
+    );
+
+    const submittedIds = new Set(
+      form.variants
+        .map((variant) => variant.id)
+        .filter((id): id is string => Boolean(id))
+    );
+
+    // 3. Process submitted variants
+    for (const variant of form.variants) {
+      let imageUrl = variant.imagePreview || null;
+
+      // Upload replacement image if one was selected
+      if (variant.imageFile) {
+        imageUrl = await uploadProductImage(
+          variant.imageFile,
+          productId
+        );
+      }
+
+      const variantData = {
+        sku:
+          variant.sku.trim() ||
+          generateSku(form.name, variant.length),
+        length: variant.length || null,
+        lace_type: variant.lace_type || null,
+        density: variant.density || null,
+        color: variant.color || null,
+        price: Number(variant.price),
+        stock_quantity: Number(variant.stock_quantity),
+        is_preorder: variant.is_preorder,
+        is_active: variant.is_active,
+        image_url: imageUrl,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (variant.id) {
+        // Update existing variant
+        const { error } = await supabase
+          .from("product_variants")
+          .update(variantData)
+          .eq("id", variant.id)
+          .eq("product_id", productId);
+
+        if (error) throw error;
+      } else {
+        // Insert new variant
+        const { error } = await supabase
+          .from("product_variants")
+          .insert({
+            ...variantData,
+            product_id: productId,
+            sku: variantData.sku,
+          });
+
+        if (error) throw error;
+      }
+    }
+
+    // 4. Deactivate variants removed from the edit form
+    const removedIds = [...existingIds].filter(
+      (id) => !submittedIds.has(id)
+    );
+
+    if (removedIds.length > 0) {
+      const { error } = await supabase
+        .from("product_variants")
+        .update({ is_active: false })
+        .in("id", removedIds)
+        .eq("product_id", productId);
+
+      if (error) throw error;
+    }
+
+    // 5. Refresh products
+    await fetchProducts();
+
+  } finally {
+    setSaving(false);
+  }
+}
 
   return {
     products,
@@ -219,6 +340,7 @@ export function useProducts() {
     fetchProducts,
     fetchCategories,
     addProduct,
+    updateProduct,
     deactivateProduct,
   };
 }

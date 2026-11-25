@@ -1,5 +1,5 @@
 export interface ProductVariant {
-  id: string;
+  id?: string;
   sku: string;
   length: string | null;
   lace_type: string | null;
@@ -19,7 +19,8 @@ export interface Product {
   description: string | null;
   hair_type: string | null;
   is_active: boolean;
-
+  category_id: string | null;
+  features: string[];
   category: {
     name: string;
   } | null;

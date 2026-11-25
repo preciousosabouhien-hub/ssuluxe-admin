@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import type {
   Category,
+  Product,
   ProductFormData,
   VariantFormData,
 } from "../../types/product";
-import { emptyVariant, generateSku } from "../../utils/productHelpers";
-import  ProductImageUpload from "./ProductImageUpload";
-import ProductVariantForm from "./ProductVariantForm"
+
+import { emptyVariant } from "../../utils/productHelpers";
+import ProductVariantForm from "./ProductVariantForm";
 
 interface ProductFormProps {
   categories: Category[];
   saving: boolean;
+  initialData?: Product | null;
   onSubmit: (form: ProductFormData) => Promise<void>;
   onCancel: () => void;
 }
@@ -18,6 +21,7 @@ interface ProductFormProps {
 export default function ProductForm({
   categories,
   saving,
+  initialData,
   onSubmit,
   onCancel,
 }: ProductFormProps) {
@@ -31,6 +35,51 @@ export default function ProductForm({
     variants: [emptyVariant()],
   });
 
+  // Populate form when editing an existing product
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        name: initialData.name ?? "",
+        categoryId: initialData.category_id ?? "",
+        description: initialData.description ?? "",
+        hairType: initialData.hair_type ?? "",
+        features: initialData.features?.join(", ") ?? "",
+        isActive: initialData.is_active ?? true,
+
+        variants:
+          initialData.product_variants?.length > 0
+            ? initialData.product_variants.map((variant) => ({
+                id: variant.id,
+                sku: variant.sku ?? "",
+                length: variant.length ?? "",
+                lace_type: variant.lace_type ?? "",
+                density: variant.density ?? "",
+                color: variant.color ?? "",
+                price: String(variant.price ?? ""),
+                stock_quantity: String(
+                  variant.stock_quantity ?? 0
+                ),
+                is_preorder: variant.is_preorder ?? false,
+                is_active: variant.is_active ?? true,
+                imageFile: null,
+                imagePreview: variant.image_url ?? "",
+              }))
+            : [emptyVariant()],
+      });
+    } else {
+      setForm({
+        name: "",
+        categoryId: "",
+        description: "",
+        hairType: "",
+        features: "",
+        isActive: true,
+        variants: [emptyVariant()],
+      });
+    }
+  }, [initialData]);
+
+  // Update product information
   const updateForm = (
     field: keyof ProductFormData,
     value: string | boolean
@@ -41,6 +90,7 @@ export default function ProductForm({
     }));
   };
 
+  // Update a specific variant
   const updateVariant = (
     index: number,
     field: keyof VariantFormData,
@@ -56,6 +106,7 @@ export default function ProductForm({
     }));
   };
 
+  // Add a new variant
   const addVariant = () => {
     setForm((prev) => ({
       ...prev,
@@ -63,6 +114,7 @@ export default function ProductForm({
     }));
   };
 
+  // Remove a variant
   const removeVariant = (index: number) => {
     if (form.variants.length === 1) {
       alert("A product must have at least one variant.");
@@ -75,34 +127,7 @@ export default function ProductForm({
     }));
   };
 
-  const handleImageChange = (
-    index: number,
-    file: File | undefined
-  ) => {
-    if (!file) return;
-
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      alert("Please select a JPG, PNG, or WebP image.");
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Image size must not exceed 5MB.");
-      return;
-    }
-
-    const preview = URL.createObjectURL(file);
-
-    updateVariant(index, "imageFile", file);
-    updateVariant(index, "imagePreview", preview);
-  };
-
+  // Submit form
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
@@ -122,23 +147,33 @@ export default function ProductForm({
       (variant) =>
         !variant.price ||
         Number(variant.price) <= 0 ||
+        variant.stock_quantity === "" ||
+        !Number.isFinite(Number(variant.stock_quantity)) ||
         Number(variant.stock_quantity) < 0
     );
 
     if (invalidVariant) {
-      alert("Please enter a valid price and stock quantity for every variant.");
+      alert(
+        "Please enter a valid price and stock quantity for every variant."
+      );
       return;
     }
 
     try {
       await onSubmit(form);
     } catch (error) {
-      console.error("Product form submission failed:", error);
+      console.error(
+        "Product form submission failed:",
+        error
+      );
     }
   };
 
   return (
-    <form className="product-form" onSubmit={handleSubmit}>
+    <form
+      className="product-form"
+      onSubmit={handleSubmit}
+    >
       {/* Product Information */}
       <div className="product-form-section">
         <h3>Product Information</h3>
@@ -148,7 +183,9 @@ export default function ProductForm({
           <input
             type="text"
             value={form.name}
-            onChange={(e) => updateForm("name", e.target.value)}
+            onChange={(e) =>
+              updateForm("name", e.target.value)
+            }
             placeholder="e.g. Luxury Body Wave Wig"
             required
           />
@@ -166,7 +203,10 @@ export default function ProductForm({
             <option value="">Select category</option>
 
             {categories.map((category) => (
-              <option key={category.id} value={category.id}>
+              <option
+                key={category.id}
+                value={category.id}
+              >
                 {category.name}
               </option>
             ))}
@@ -178,7 +218,9 @@ export default function ProductForm({
           <input
             type="text"
             value={form.hairType}
-            onChange={(e) => updateForm("hairType", e.target.value)}
+            onChange={(e) =>
+              updateForm("hairType", e.target.value)
+            }
             placeholder="e.g. 100% Human Hair"
           />
         </label>
@@ -199,7 +241,9 @@ export default function ProductForm({
           Features
           <textarea
             value={form.features}
-            onChange={(e) => updateForm("features", e.target.value)}
+            onChange={(e) =>
+              updateForm("features", e.target.value)
+            }
             placeholder="Enter features separated by commas"
             rows={3}
           />
@@ -213,15 +257,20 @@ export default function ProductForm({
               updateForm("isActive", e.target.checked)
             }
           />
+
           Active product
         </label>
       </div>
-      <ProductVariantForm 
-      variants={form.variants}
-      productName={form.name}
-      onChange={updateVariant}
-      onAdd={addVariant}
-      onRemove={removeVariant} />
+
+      {/* Product Variants */}
+      <ProductVariantForm
+        variants={form.variants}
+        productName={form.name}
+        onChange={updateVariant}
+        onAdd={addVariant}
+        onRemove={removeVariant}
+      />
+
       {/* Form Actions */}
       <div className="product-form-actions">
         <button
@@ -232,8 +281,15 @@ export default function ProductForm({
           Cancel
         </button>
 
-        <button type="submit" disabled={saving}>
-          {saving ? "Saving Product..." : "Save Product"}
+        <button
+          type="submit"
+          disabled={saving}
+        >
+          {saving
+            ? "Saving Product..."
+            : initialData
+              ? "Update Product"
+              : "Save Product"}
         </button>
       </div>
     </form>
