@@ -34,6 +34,7 @@ export interface Category {
 }
 
 export interface VariantFormData {
+  id?: string;
   sku: string;
   length: string;
   lace_type: string;
@@ -44,7 +45,7 @@ export interface VariantFormData {
   is_preorder: boolean;
   is_active: boolean;
   imageFile: File | null;
-  imagePreview: string;
+  imagePreview: string | null;
 }
 
 export interface ProductFormData {
