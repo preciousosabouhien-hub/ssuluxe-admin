@@ -45,7 +45,7 @@ export interface VariantFormData {
   is_preorder: boolean;
   is_active: boolean;
   imageFile: File | null;
-  imagePreview: string | null;
+  imagePreview: string;
 }
 
 export interface ProductFormData {
