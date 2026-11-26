@@ -17,18 +17,13 @@ import { useDashboard } from "./context/DashboardContext";
 function OverviewPage() {
 return (
 <>
-{metrics.map((metric) => (
-<MetricCard key={metric.icon} metric={{...metric, trend: metric.trend as "up" | "down"}} />
-))}
     <RevenueChart />
 
   <div className="middle-grid">
     <SalesActivityChart />
     <CustomerSatisfaction />
-    <TrafficSources />
   </div>
   <OrdersTable />
-  <Wishlist />
 </> ); }
 
 function PlaceholderPage({ title, description}: {

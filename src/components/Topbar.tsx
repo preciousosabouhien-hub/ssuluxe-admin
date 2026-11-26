@@ -46,7 +46,8 @@ showNotice("Unable to log out. Please try again.");
 }
 
 return (
-    <header className="topbar">
+    <header className="topbar"><button className="icon-button mobile-menu" onClick={onMenuClick} aria-label="Open navigation">
+    <Menu size={20}/></button>
   <div className="breadcrumbs">
     <span>Workspace</span>
     <ChevronRight size={14} />
